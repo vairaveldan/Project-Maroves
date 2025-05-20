@@ -1,0 +1,10 @@
+0 empty
+1 basalt
+2 gabbro
+3 volcanic glass
+4 periodite
+5 scoria
+6 sand stone
+7 mud stone
+8 silica
+9 magnetite
