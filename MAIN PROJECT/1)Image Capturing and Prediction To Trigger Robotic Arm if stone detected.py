@@ -7,42 +7,61 @@ import numpy as np
 from keras.models import load_model
 
 # ---------- Program 1: Interactive run on Pi with Ctrl+C on Enter ----------
-def run_program_1_on_pi():
+def run_remote_python_script():
     hostname = "raspberrypi.local"
     username = "maroves"
     password = "1234"
 
-    print("Running program.py interactively on Raspberry Pi...")
+    print("[INFO] Connecting to Raspberry Pi at", hostname, "with username:", username)
 
     client = paramiko.SSHClient()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    client.connect(hostname, username=username, password=password)
-
-    channel = client.invoke_shell()
-    channel.send("python3 program.py\n")
-
-    def read_output():
-        while True:
-            if channel.recv_ready():
-                output = channel.recv(1024).decode()
-                print(output, end="")
-
-    output_thread = threading.Thread(target=read_output, daemon=True)
-    output_thread.start()
 
     try:
+        client.connect(hostname, username=username, password=password)
+        print("[INFO] Successfully connected to Raspberry Pi.")
+
+        # Create a shell channel
+        channel = client.invoke_shell()
+        print("[INFO] Shell session started.")
+
+        # Navigate to the desired directory and run the Python script
+        print("[CMD] cd ~")
+        channel.send("cd ~\n")
+
+        print("[CMD] clear")
+        channel.send("clear\n")
+
+        print("[CMD] python3 program.py")
+        channel.send("python3 program.py\n")
+
+        # Function to continuously read output from the Raspberry Pi
+        def read_output():
+            while True:
+                if channel.recv_ready():
+                    output = channel.recv(1024).decode()
+                    print(output, end="")
+
+        output_thread = threading.Thread(target=read_output, daemon=True)
+        output_thread.start()
+
+        print("[INFO] Press Enter to send Ctrl+C and stop the program.")
         while True:
             key = input()
             if key == "":
-                channel.send("\x03")  # Send Ctrl+C
-    except KeyboardInterrupt:
-        print("Interrupted by user.")
+                print("[CMD] Sending Ctrl+C to stop the script.")
+                channel.send("\x03")  # Send Ctrl+C to stop the script
+
+    except Exception as e:
+        print(f"[ERROR] {e}")
+
     finally:
+        print("[INFO] Closing SSH connection.")
         channel.close()
         client.close()
+        print("[INFO] Disconnected.")
 
-
-# ---------- Program 2: Image processing pipeline ----------
+# ---------- Program 2: Image Capturing on RPI ----------
 def capture_image_from_pi(hostname, username, password, remote_image):
     client = paramiko.SSHClient()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -62,14 +81,14 @@ def capture_image_from_pi(hostname, username, password, remote_image):
     print("Picture taken successfully.")
     return True
 
-
+# ---------- Program 3: Image Transferring to the Local System (Laptop) ----------
 def transfer_image(hostname, username, password, remote_image, local_path):
     print("Transferring image to local machine...")
     pscp_command = ["pscp", "-pw", password, f"{username}@{hostname}:{remote_image}", local_path]
     subprocess.run(pscp_command, check=True)
     print("Image transferred successfully.")
 
-
+# ---------- Program 4: Image Prediction using a Pre-trained Model ----------
 def predict_image(image_path, model_path, labels_path):
     model = load_model(model_path, compile=False)
     with open(labels_path, "r") as f:
@@ -94,7 +113,7 @@ def predict_image(image_path, model_path, labels_path):
         print("Stone not detected.")
         return False
 
-
+# ---------- Main Function -----------
 def main():
     hostname = "raspberrypi.local"
     username = "maroves"
@@ -111,7 +130,7 @@ def main():
 
         if predict_image(local_path, model_path, labels_path):
             print("Calling Program 1 to run on Raspberry Pi...")
-            run_program_1_on_pi()
+            run_remote_python_script()
 
 
 if __name__ == "__main__":
