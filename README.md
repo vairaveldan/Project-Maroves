@@ -1,10 +1,8 @@
-# Intelligent Obstruction Management System for Rover (MAROVES)
+# MAROVES: Intelligent Obstruction Management System for Rovers
 
-This repository contains the code, datasets, and models for our final-year project: **Design & Development of an Intelligent Obstruction Management System for Rover**.
+Welcome to the official repository for **MAROVES** – a final-year engineering project focused on building an intelligent system to detect and remove obstructions from rover wheels using computer vision and robotics.
 
-# Maroves - Intelligent Obstruction Management System
-
-This is a final-year engineering project that solves the problem of lodged stones in rover wheels using image processing and a robotic arm.
+This project, titled **"Design and Development of an Intelligent Obstruction Management System for Rovers,"** aims to enhance planetary rover autonomy and resilience by addressing the real-world issue of lodged stones using machine learning and a robotic arm.
 
 ## 🌍 Problem Statement
 
