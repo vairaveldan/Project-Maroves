@@ -1,10 +1,10 @@
-# Maroves - Intelligent Obstruction Management System
-
-This is a final-year engineering project that solves the problem of lodged stones in rover wheels using image processing and a robotic arm.
-
 # Intelligent Obstruction Management System for Rover (MAROVES)
 
 This repository contains the code, datasets, and models for our final-year project: **Design & Development of an Intelligent Obstruction Management System for Rover**.
+
+# Maroves - Intelligent Obstruction Management System
+
+This is a final-year engineering project that solves the problem of lodged stones in rover wheels using image processing and a robotic arm.
 
 ## 🌍 Problem Statement
 
@@ -49,8 +49,8 @@ Our system detects and removes lodged stones from rover wheels using a Raspberry
 ## 📂 Code Structure
 
 - `1)Image Capturing and Prediction To Trigger Robotic Arm if stone detected.py`: Captures and classifies images. Triggers robotic arm if stone is found.
-- `program.py`: Controls GPIO pin to send signal to Arduino.
-- `Robotic Arm Controller.ino`: Arduino code to run the robotic arm.
+- `2)program.py`: Controls GPIO pin to send signal to Arduino.
+- `3)Robotic Arm Controller.ino`: Arduino code to run the robotic arm.
 - `keras_model.h5`: Trained CNN model.
 - `labels.txt`: Class names.
 
